@@ -72,7 +72,7 @@ export default function Navbar() {
         {!isOpen && (
         <button
             onClick={handleToggleMenu}
-            className="text-white lg:hidden"
+            className="text-black lg:hidden"
             aria-label="Toggle navigation"
         >
             <Menu size={28} />
@@ -88,12 +88,12 @@ export default function Navbar() {
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: '-100%', opacity: 0 }}
       transition={{ type: 'spring', stiffness: 60, damping: 15 }}
-      className="fixed inset-0 bg-[--color-primary] z-40 p-6 pt-24 flex flex-col items-center justify-start space-y-6 text-white text-2xl font-medium"
+      className="fixed inset-0 bg-[--color-primary] z-40 p-6 pt-24 flex flex-col items-center justify-start space-y-6 text-black text-2xl font-medium bg-white"
     >
       {/* Close Button */}
       <button
         onClick={handleCloseMenu}
-        className="absolute top-6 right-6 text-white"
+        className="absolute top-6 right-6 text-black "
         aria-label="Close menu"
       >
         <X size={28} />
