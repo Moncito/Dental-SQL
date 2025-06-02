@@ -15,8 +15,8 @@ const navLinks: NavLink[] = [
   { href: '/', label: 'Home' },
   { href: '#doctors', label: 'Doctors' },
   { href: '#pricing', label: 'Price list' },
-  { href: '#contact', label: 'Contact' },
   { href: '#team', label: 'Team' },
+  { href: '#contact', label: 'Contact' },
 ];
 
 interface NavbarLinkProps {
@@ -64,7 +64,7 @@ export default function Navbar() {
             href="/auth/sign-up"
             className="ml-6 bg-white text-black text-lg font-medium px-4 py-2 rounded-lg shadow hover:bg-gray-100 transition"
           >
-            Get in touch
+            Appointment 
           </Link>
         </div>
 
@@ -116,7 +116,7 @@ export default function Navbar() {
         className="mt-10 bg-white text-[--color-primary] px-6 py-3 text-black rounded-full text-lg font-semibold shadow hover:bg-gray-100 transition"
         style={{ minWidth: '180px', textAlign: 'center' }}
       >
-        Get in touch
+        Book an Appointment
       </Link>
     </motion.div>
   )}

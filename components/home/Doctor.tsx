@@ -20,7 +20,7 @@ export default function DoctorSection() {
   return (
     <motion.section
       id="doctors"
-      className="scroll-mt-32 px-6 md:px-12 lg:px-24 py-16 bg-white text-black"
+      className="scroll-mt-32 px-6 md:px-12 lg:px-24 py-16 bg-gray-200 text-black"
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
