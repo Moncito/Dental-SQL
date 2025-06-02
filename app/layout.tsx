@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner"; // ✅ Add this import
 
 // DM Sans font with CSS variable
 const dmSans = DM_Sans({
@@ -26,6 +27,7 @@ export default function RootLayout({
         style={{ fontFamily: "var(--font-dm-sans)" }}
       >
         {children}
+        <Toaster richColors position="top-center" expand={true} /> {/* ✅ Toasts rendered here */}
       </body>
     </html>
   );
