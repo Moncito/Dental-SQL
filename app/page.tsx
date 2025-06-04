@@ -7,9 +7,9 @@ import PriceList from '@/components/home/PriceList'
 import Team from '@/components/home/Team'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
-    <div>
+    <div className='bg-[var(--color-primary)]'>
       <Navbar/>
       <HeroSection/>
       <Doctor/>
@@ -21,4 +21,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page;
