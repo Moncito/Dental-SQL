@@ -1,22 +1,17 @@
 // app/api/get-appointments/route.ts
-import { NextResponse } from 'next/server';
+import {  NextResponse } from 'next/server';
 import { getDBPool } from '@/lib/db';
 
 export async function GET() {
   try {
-    const db = await getDBPool();
-
-    const result = await db.query(`
-      SELECT Id, FullName, Email, PhoneNumber, Service, AppointmentDate, AppointmentTime, Notes
-      FROM appointments
-      ORDER BY AppointmentDate DESC, AppointmentTime DESC
+    const pool = await getDBPool();
+    const result = await pool.request().query(`
+      SELECT * FROM Appointments WHERE Status = 'Pending'
     `);
 
-    console.log('Result:', result);
-
-    return NextResponse.json(result.recordset || []);
-  } catch (error) {
-    console.error('❌ Error fetching appointments:', error);
-    return NextResponse.json({ error: 'Failed to fetch appointments' }, { status: 500 });
+    return NextResponse.json(result.recordset);
+  } catch (err) {
+    console.error('❌ Failed to fetch appointments:', err);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

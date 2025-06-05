@@ -4,38 +4,26 @@ import { getDBPool } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
   try {
-    const {
-      Id,
-      FullName,
-      AppointmentDate,
-      AppointmentTime,
-      Service,
-    } = await req.json();
-
-    if (!Id) {
-      return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
-    }
+    const { Id } = await req.json();
 
     const pool = await getDBPool();
 
-    // Insert into ScheduledAppointments
+    // Update appointment status
     await pool.request()
       .input('Id', Id)
-      .input('FullName', FullName)
-      .input('AppointmentDate', AppointmentDate)
-      .input('AppointmentTime', AppointmentTime)
-      .input('Service', Service)
-      .query(`
-        INSERT INTO ScheduledAppointments (Id, FullName, AppointmentDate, AppointmentTime, Service)
-        VALUES (@Id, @FullName, @AppointmentDate, @AppointmentTime, @Service)
-      `);
+      .query(`UPDATE Appointments SET Status = 'Scheduled' WHERE Id = @Id`);
 
-    // Delete from original Appointments
-    await pool.request().input('Id', Id).query(`
-      DELETE FROM Appointments WHERE Id = @Id
-    `);
+    // Fetch updated appointment (including email)
+    const result = await pool.request()
+      .input('Id', Id)
+      .query(`SELECT FullName, Email, AppointmentDate, AppointmentTime FROM Appointments WHERE Id = @Id`);
 
-    return NextResponse.json({ success: true });
+    const appt = result.recordset[0];
+
+    return NextResponse.json({
+      success: true,
+      appointment: appt,
+    });
   } catch (err) {
     console.error('❌ Move to scheduled failed:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

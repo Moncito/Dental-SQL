@@ -20,7 +20,7 @@ export default function AppointmentsTabs() {
   useEffect(() => {
     const fetchScheduled = async () => {
       try {
-        const res = await fetch('/api/get-scheduled-appointments');
+        const res = await fetch('/api/appointments/scheduled');
         const data = await res.json();
         if (Array.isArray(data)) {
           setScheduled(data);
@@ -34,7 +34,7 @@ export default function AppointmentsTabs() {
 
     const fetchCancelled = async () => {
       try {
-        const res = await fetch('/api/get-cancelled-appointments');
+        const res = await fetch('/api/appointments/cancelled');
         const data = await res.json();
         if (Array.isArray(data)) {
           setCancelled(data);

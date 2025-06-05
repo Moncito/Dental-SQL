@@ -1,43 +1,40 @@
-// app/api/save-appointment/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getDBPool } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
     const {
       name,
       email,
-      PhoneNumber, // ✅ match casing with your form/body
+      PhoneNumber,
       service,
       date,
       time,
       notes,
-    } = data;
+    } = await req.json();
 
-    const db = await getDBPool();
+    const pool = await getDBPool();
 
-    await db
-      .request()
+    await pool.request()
       .input('FullName', name)
       .input('Email', email)
-      .input('PhoneNumber', PhoneNumber) // ✅ Match with SQL column
+      .input('PhoneNumber', PhoneNumber)
       .input('Service', service)
+      .input('Notes', notes || '')
       .input('AppointmentDate', date)
       .input('AppointmentTime', time)
-      .input('Notes', notes || '')
+      .input('Status', 'Pending') // ✅ default status
+      .input('CreatedAt', new Date())
       .query(`
-        INSERT INTO appointments (
-          FullName, Email, PhoneNumber, Service, AppointmentDate, AppointmentTime, Notes
-        )
-        VALUES (
-          @FullName, @Email, @PhoneNumber, @Service, @AppointmentDate, @AppointmentTime, @Notes
-        )
+        INSERT INTO Appointments
+        (FullName, Email, PhoneNumber, Service, Notes, AppointmentDate, AppointmentTime, Status, CreatedAt)
+        VALUES
+        (@FullName, @Email, @PhoneNumber, @Service, @Notes, @AppointmentDate, @AppointmentTime, @Status, @CreatedAt)
       `);
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('❌ Error saving appointment:', error);
-    return NextResponse.json({ error: 'Failed to save appointment' }, { status: 500 });
+  } catch (err) {
+    console.error('❌ Error saving appointment:', err);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

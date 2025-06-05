@@ -2,25 +2,27 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import SendSmsConfirmModal from '@/components/admin/SendSmsConfirmModal';
+import SendEmailConfirmModal from '@/components/admin/SendEmailConfirmModal';
 
 interface Appointment {
   Id: number;
   FullName: string;
+  Email: string; // ✅ Add this line
   AppointmentDate: string;
   AppointmentTime: string;
   Service: string;
   PhoneNumber?: string;
+  CancelReason?: string;
 }
 
 export default function ScheduledAppointments() {
   const [scheduled, setScheduled] = useState<Appointment[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/get-scheduled-list')
+    fetch('/api/appointments/scheduled')
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setScheduled(data);
@@ -33,7 +35,6 @@ export default function ScheduledAppointments() {
     <div className="mt-10 bg-white p-6 rounded-2xl shadow-lg border">
       <h2 className="text-2xl font-bold text-green-700 mb-6">Scheduled Appointments</h2>
       {error && <p className="text-red-600">{error}</p>}
-
       {scheduled.length === 0 ? (
         <p className="text-gray-500 text-sm">No scheduled appointments.</p>
       ) : (
@@ -45,19 +46,18 @@ export default function ScheduledAppointments() {
                 <th className="px-4 py-3 text-left">Service</th>
                 <th className="px-4 py-3 text-left">Date</th>
                 <th className="px-4 py-3 text-left">Time</th>
+                <th className="px-4 py-3 text-left">Phone</th>
                 <th className="px-4 py-3 text-left rounded-r-lg">Action</th>
               </tr>
             </thead>
             <tbody>
               {scheduled.map((a) => (
-                <tr
-                  key={a.Id}
-                  className="bg-gray-50 hover:bg-green-50 transition rounded-xl shadow-sm text-sm"
-                >
+                <tr key={a.Id} className="bg-gray-50 hover:bg-green-50 transition rounded-xl shadow-sm text-sm">
                   <td className="px-4 py-3 font-medium text-gray-800">{a.FullName}</td>
                   <td className="px-4 py-3 text-gray-700">{a.Service}</td>
                   <td className="px-4 py-3 text-gray-700">{a.AppointmentDate}</td>
                   <td className="px-4 py-3 text-gray-700">{a.AppointmentTime}</td>
+                  <td className="px-4 py-3 text-gray-700">{a.PhoneNumber}</td>
                   <td className="px-4 py-3">
                     <Button
                       variant="outline"
@@ -68,7 +68,7 @@ export default function ScheduledAppointments() {
                         setModalOpen(true);
                       }}
                     >
-                      Send SMS
+                      Send Email
                     </Button>
                   </td>
                 </tr>
@@ -78,18 +78,17 @@ export default function ScheduledAppointments() {
         </div>
       )}
 
-      {selected && selected.PhoneNumber && (
-      <SendSmsConfirmModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        phone={selected.PhoneNumber}
-        fullName={selected.FullName}
-        type="scheduled"
-        date={selected.AppointmentDate}
-        time={selected.AppointmentTime}
-        onSent={() => console.log('Scheduled SMS sent')}
-    />
-    )}
+      {selected && (
+            <SendEmailConfirmModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            email={selected.Email!} // ✅ make sure `Email` is present in the `selected` object
+            fullName={selected.FullName}
+            type="scheduled"
+            reason={selected.CancelReason ?? 'No reason provided'}
+            onSent={() => console.log('Email sent')}
+          />
+        )}
     </div>
   );
 }

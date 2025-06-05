@@ -37,27 +37,39 @@ export default function AppointmentsTable() {
   };
 
   const handleMove = async (appt: Appointment, type: 'scheduled' | 'cancelled') => {
-    const endpoint = type === 'scheduled'
-      ? '/api/move-to-scheduled'
-      : '/api/move-to-cancelled';
-
-    const payload = {
-      Id: appt.Id,
-      FullName: appt.FullName,
-      AppointmentDate: appt.AppointmentDate,
-      AppointmentTime: appt.AppointmentTime,
-      Service: appt.Service,
-    };
+    const endpoint =
+      type === 'scheduled'
+        ? '/api/move-to-scheduled'
+        : '/api/move-to-cancelled';
 
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ Id: appt.Id }),
     });
 
     if (res.ok) {
-      toast.success(`Moved to ${type.charAt(0).toUpperCase() + type.slice(1)} successfully!`);
-      fetchAppointments();
+      // ✅ Notify success
+      toast.success(`Moved to ${type} successfully!`);
+
+      // ✅ Send email notification
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: appt.Email,
+          subject:
+            type === 'scheduled'
+              ? 'Your Appointment Has Been Scheduled'
+              : 'Your Appointment Has Been Cancelled',
+          text:
+            type === 'scheduled'
+              ? `Hello ${appt.FullName}, your appointment for ${appt.Service} is scheduled on ${appt.AppointmentDate} at ${appt.AppointmentTime}.`
+              : `Hello ${appt.FullName}, your appointment for ${appt.Service} on ${appt.AppointmentDate} at ${appt.AppointmentTime} has been cancelled.`,
+        }),
+      });
+
+      fetchAppointments(); // ✅ Refresh table
     } else {
       toast.error(`Failed to move to ${type}`);
     }

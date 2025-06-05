@@ -4,38 +4,35 @@ import { getDBPool } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
   try {
-    const {
-      Id,
-      FullName,
-      AppointmentDate,
-      AppointmentTime,
-      Service,
-    } = await req.json();
+    const { Id, CancelReason = '' } = await req.json();
 
     if (!Id) {
-      return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing appointment ID' }, { status: 400 });
     }
 
     const pool = await getDBPool();
 
-    // Insert into CancelledAppointments
+    // Update appointment status and reason
     await pool.request()
       .input('Id', Id)
-      .input('FullName', FullName)
-      .input('AppointmentDate', AppointmentDate)
-      .input('AppointmentTime', AppointmentTime)
-      .input('Service', Service)
+      .input('CancelReason', CancelReason)
       .query(`
-        INSERT INTO CancelledAppointments (Id, FullName, AppointmentDate, AppointmentTime, Service)
-        VALUES (@Id, @FullName, @AppointmentDate, @AppointmentTime, @Service)
+        UPDATE Appointments 
+        SET Status = 'Cancelled', CancelReason = @CancelReason 
+        WHERE Id = @Id
       `);
 
-    // Delete from original Appointments
-    await pool.request().input('Id', Id).query(`
-      DELETE FROM Appointments WHERE Id = @Id
-    `);
+    // Fetch updated appointment (including email)
+    const result = await pool.request()
+      .input('Id', Id)
+      .query(`SELECT FullName, Email, CancelReason FROM Appointments WHERE Id = @Id`);
 
-    return NextResponse.json({ success: true });
+    const appt = result.recordset[0];
+
+    return NextResponse.json({
+      success: true,
+      appointment: appt,
+    });
   } catch (err) {
     console.error('❌ Move to cancelled failed:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
