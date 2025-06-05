@@ -15,6 +15,8 @@ interface Props {
   open: boolean;
   onClose: () => void;
   appointmentId: number;
+  fullName: string;
+  phoneNumber: string;
   onCancelled: () => void;
 }
 
@@ -22,6 +24,8 @@ export default function CancelReasonModal({
   open,
   onClose,
   appointmentId,
+  fullName,
+  phoneNumber,
   onCancelled,
 }: Props) {
   const [reason, setReason] = useState('');
@@ -34,6 +38,17 @@ export default function CancelReasonModal({
     });
 
     if (res.ok) {
+      // ✅ Send SMS after cancellation
+      await fetch('/api/sms/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: phoneNumber,
+          fullName,
+          reason,
+        }),
+      });
+
       toast.success('Appointment cancelled!');
       onCancelled();
       onClose();

@@ -21,6 +21,7 @@ type ScheduleModalProps = {
     date: string;
     time: string;
     notes?: string;
+    phoneNumber?: string; // ✅ add phone number support
   };
   onScheduled: () => void;
 };
@@ -49,6 +50,18 @@ export function ScheduleModal({
     });
 
     if (res.ok) {
+      // ✅ Send SMS after scheduling
+      await fetch('/api/sms/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: appointment.phoneNumber ?? '+639776980768', // fallback for now
+          fullName: appointment.fullName,
+          date,
+          time,
+        }),
+      });
+
       toast.success('Appointment scheduled!');
       onScheduled();
       onClose();
@@ -93,9 +106,7 @@ export function ScheduleModal({
           </div>
 
           <div className="flex justify-end pt-4 gap-2">
-            <Button variant="ghost" onClick={onClose}>
-              Cancel
-            </Button>
+            <Button variant="ghost" onClick={onClose}>Cancel</Button>
             <Button onClick={handleSubmit}>Confirm</Button>
           </div>
         </div>
