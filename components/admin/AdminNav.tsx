@@ -8,6 +8,7 @@ const navItems = [
   { label: 'All Appointments', href: '/admin' },
   { label: 'Scheduled', href: '/admin/appointments/scheduled' },
   { label: 'Cancelled', href: '/admin/appointments/cancelled' },
+  { label: 'Completed', href: '/admin/appointments/completed' }, // ✅ NEW tab
 ];
 
 export default function AdminNav() {

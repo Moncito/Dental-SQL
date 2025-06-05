@@ -3,11 +3,14 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import SendEmailConfirmModal from '@/components/admin/SendEmailConfirmModal';
+import ConfirmCompleteModal from '@/components/admin/ConfirmCompleteModal';
+import { toast } from 'sonner';
+
 
 interface Appointment {
   Id: number;
   FullName: string;
-  Email: string; // ✅ Add this line
+  Email: string;
   AppointmentDate: string;
   AppointmentTime: string;
   Service: string;
@@ -19,17 +22,30 @@ export default function ScheduledAppointments() {
   const [scheduled, setScheduled] = useState<Appointment[]>([]);
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/appointments/scheduled')
       .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setScheduled(data);
-        else setError('Invalid format');
-      })
+      .then((data) => Array.isArray(data) ? setScheduled(data) : setError('Invalid format'))
       .catch(() => setError('Failed to fetch scheduled appointments'));
   }, []);
+
+const handleMoveToComplete = async (appointment: Appointment) => {
+  const res = await fetch('/api/move-to-complete', {
+    method: 'POST',
+    body: JSON.stringify(appointment),
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (res.ok) {
+    toast.success(`${appointment.FullName}'s appointment marked as completed!`);
+    setScheduled(prev => prev.filter(a => a.Id !== appointment.Id)); // for ScheduledAppointments
+  } else {
+    toast.error('Failed to move appointment to completed.');
+  }
+};
+
 
   return (
     <div className="mt-10 bg-white p-6 rounded-2xl shadow-lg border">
@@ -47,7 +63,7 @@ export default function ScheduledAppointments() {
                 <th className="px-4 py-3 text-left">Date</th>
                 <th className="px-4 py-3 text-left">Time</th>
                 <th className="px-4 py-3 text-left">Phone</th>
-                <th className="px-4 py-3 text-left rounded-r-lg">Action</th>
+                <th className="px-4 py-3 text-left rounded-r-lg">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -58,17 +74,18 @@ export default function ScheduledAppointments() {
                   <td className="px-4 py-3 text-gray-700">{a.AppointmentDate}</td>
                   <td className="px-4 py-3 text-gray-700">{a.AppointmentTime}</td>
                   <td className="px-4 py-3 text-gray-700">{a.PhoneNumber}</td>
-                  <td className="px-4 py-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-green-600 border-green-300 hover:bg-green-100"
-                      onClick={() => {
-                        setSelected(a);
-                        setModalOpen(true);
-                      }}
-                    >
+                  <td className="px-4 py-3 flex gap-2">
+                    <Button variant="outline"  className="text-green-600 border-green-300 hover:bg-green-100 cursor-pointer" size="sm" onClick={() => {
+                      setSelected(a);
+                      setModalOpen(true);
+                    }}>
                       Send Email
+                    </Button>
+                    <Button variant="ghost"  className="text-green-600 border-green-300 hover:bg-green-100 cursor-pointer" size="sm" onClick={() => {
+                      setSelected(a);
+                      setConfirmOpen(true);
+                    }}>
+                      Mark Complete
                     </Button>
                   </td>
                 </tr>
@@ -79,16 +96,28 @@ export default function ScheduledAppointments() {
       )}
 
       {selected && (
-            <SendEmailConfirmModal
+        <>
+          <SendEmailConfirmModal
             open={modalOpen}
             onClose={() => setModalOpen(false)}
-            email={selected.Email!} // ✅ make sure `Email` is present in the `selected` object
+            email={selected.Email}
             fullName={selected.FullName}
             type="scheduled"
-            reason={selected.CancelReason ?? 'No reason provided'}
+            date={selected.AppointmentDate}
+            time={selected.AppointmentTime}
             onSent={() => console.log('Email sent')}
           />
-        )}
+          <ConfirmCompleteModal
+            open={confirmOpen}
+            onClose={() => setConfirmOpen(false)}
+            onConfirm={() => {
+              if (selected) handleMoveToComplete(selected);
+              setConfirmOpen(false);
+            }}
+            fullName={selected.FullName}
+          />
+        </>
+      )}
     </div>
   );
 }

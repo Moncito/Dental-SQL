@@ -24,7 +24,7 @@ export default function DeleteConfirmationModal({
       <DialogContent className="sm:max-w-md rounded-xl border shadow-lg bg-white">
         <DialogHeader>
           <DialogTitle className="text-red-700 text-xl font-semibold">
-            ❗ Confirm Deletion
+            Confirm Deletion
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
@@ -32,8 +32,8 @@ export default function DeleteConfirmationModal({
             Are you sure you want to delete this appointment? This action cannot be undone.
           </p>
           <div className="flex justify-end space-x-2 pt-2">
-            <Button variant="ghost" onClick={onClose}>Cancel</Button>
-            <Button variant="destructive" onClick={onConfirm}>Yes, Delete</Button>
+            <Button variant="ghost" className='cursor-pointer'  onClick={onClose}>Cancel</Button>
+            <Button variant="destructive" className='cursor-pointer' onClick={onConfirm}>Yes, Delete</Button>
           </div>
         </div>
       </DialogContent>
