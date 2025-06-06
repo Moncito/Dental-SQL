@@ -5,14 +5,24 @@ import { motion } from 'framer-motion';
 
 const doctors = [
   {
-    name: 'Dr. Juan Dela Cruz',
-    specialty: 'Orthodontist',
-    imageSrc: '/image/doctor1.jpg',
+    name: 'Dr. Christine Apolinario',
+    specialty: 'Dentist',
+    imageSrc: '/image/female-doc.png',
   },
   {
-    name: 'Dr. Maria Santos',
-    specialty: 'Pediatric Dentist',
-    imageSrc: '/image/doctor2.jpg',
+    name: 'Dr. Gil Jongco',
+    specialty: 'Dentist',
+    imageSrc: '/image/male-doc.png',
+  },
+   {
+    name: 'Dr. Claire Espineli',
+    specialty: 'Dentist',
+    imageSrc: '/image/female-doc.png',
+  },
+   {
+    name: 'Dr. Marige Abaya',
+    specialty: 'Dentist',
+    imageSrc: '/image/female-doc.png',
   },
 ];
 

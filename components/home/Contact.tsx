@@ -22,7 +22,8 @@ export default function Contact() {
             <Phone className="w-6 h-6 mt-1" />
             <div>
               <h4 className="font-semibold">Phone</h4>
-              <p className="text-white/80">+63 912 345 6789</p>
+              <p className="text-white/80">+63 9537889689 </p>
+              <p className="text-white/80">+63 9558927993 </p>
             </div>
           </div>
 
@@ -39,14 +40,14 @@ export default function Contact() {
             <div>
               <h4 className="font-semibold">Location</h4>
               <p className="text-white/80">
-                123 Smile Street, Barangay Malinis, Quezon City, Metro Manila
+                Unit 3 GDC place bf drive cor Aventine Hills st. BFRV Gloria Diaz branch: 43 Gloria Diaz ave. BFRV, Las Piñas, Philippines
               </p>
             </div>
           </div>
 
           <div className="rounded-xl overflow-hidden mt-6">
             <iframe
-              src="https://maps.google.com/maps?q=Quezon%20City&t=&z=13&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=Unit%203%20GDC%20Place%20BF%20Drive%20cor%20Aventine%20Hills%20St.%2C%20BFRV%2C%2043%20Gloria%20Diaz%20Ave%2C%20Las%20Pi%C3%B1as%2C%20Philippines&t=&z=17&ie=UTF8&iwloc=&output=embed"
               className="w-full h-64 border-none rounded-xl"
               loading="lazy"
               allowFullScreen

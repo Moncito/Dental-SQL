@@ -5,27 +5,42 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 const teamMembers = [
-  {
-    name: 'Tony Ware',
-    role: 'Orthodontist',
-    experience: '5 years',
-    image: '/image/doctor1.jpg',
-    bio: `A qualified and experienced dental specialist who provides high-quality and effective dental services. Over the years of experience, he has successfully helped hundreds of patients with various oral health issues.`,
-  },
-  {
-    name: 'Maria Santos',
-    role: 'Pediatric Dentist',
-    experience: '7 years',
-    image: '/image/doctor2.jpg',
-    bio: `Known for her gentle care and attention to children, she has built trust with hundreds of families through thoughtful and professional pediatric care.`,
-  },
-  {
-    name: 'Luis Mendoza',
-    role: 'General Dentist',
-    experience: '10 years',
-    image: '/image/doctor3.jpg',
-    bio: `With a decade of experience in general dentistry, Luis focuses on preventive care, root canals, and patient education for long-term oral health.`,
-  },
+{
+  name: 'Rolyssa Lopez',
+  role: 'Dental Assistant',
+  experience: '2 years',
+  image: '/image/rolyssa.png',
+  bio: `Currently pursuing Dentistry at National University MOA, Rolyssa Lopez brings fresh energy and dedication to the clinic. As an apprentice dental assistant, she is eager to learn and committed to providing supportive and compassionate care to every patient.`,
+},
+{
+  name: 'Alod Daniah Ashley Lumis',
+  role: 'Dental Assistant',
+  experience: '1 year',
+  image: '/image/alod.png',
+  bio: `Alod Daniah Ashley Lumis is known for her gentle touch and calming presence, especially with young patients. With a year of hands-on experience, she excels in making patients—especially children—feel comfortable and cared for during every visit.`,
+},
+{
+  name: 'Marry Joy Balansag',
+  role: 'Dental Assistant',
+  experience: '3 years',
+  image: '/image/marry.png',
+  bio: `With 3 years of experience as a dental assistant, Marry Joy Balansag is admired for her kindness and attentive care. Her friendly demeanor and patient-first mindset have earned the trust of countless individuals who value her comforting presence.`,
+},
+{
+  name: 'Apple Laberas',
+  role: 'Secretary',
+  experience: '5 Years',
+  image: '/image/apple.png',
+  bio: `With over 5 years of administrative experience in the dental field, Apple Laberas is the friendly face that keeps everything running smoothly. From managing appointments to assisting with patient concerns, her efficiency and warm demeanor ensure every visit starts with a smile.`,
+},
+{
+  name: 'Sunshine Yap',
+  role: 'Secretary',
+  experience: '4 years',
+  image: '/image/sunshine.png',
+  bio: `Sunshine Yap brings 4 years of front desk expertise, offering patients a seamless and welcoming experience from the moment they walk in. Her attention to detail, professionalism, and cheerful energy make her an essential part of the clinic’s daily operations.`,
+}
+
 ];
 
 export default function Team() {
