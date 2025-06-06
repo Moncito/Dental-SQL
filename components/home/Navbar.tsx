@@ -111,7 +111,7 @@ export default function Navbar() {
 
       {/* CTA Button */}
       <Link
-        href="/sign-up"
+        href="/auth/sign-up"
         onClick={handleCloseMenu}
         className="mt-10 bg-white text-[--color-primary] px-6 py-3 text-black rounded-full text-lg font-semibold shadow hover:bg-gray-100 transition"
         style={{ minWidth: '180px', textAlign: 'center' }}
