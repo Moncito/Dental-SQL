@@ -6,11 +6,13 @@ const config: sql.config = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   server: process.env.DB_SERVER as string,
+  port: 1433, // 👈 Add this line
   options: {
     encrypt: true,
     trustServerCertificate: true,
   },
 };
+
 
 // ❗ Export a function that resolves the connection
 let _pool: sql.ConnectionPool | null = null;
